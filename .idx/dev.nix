@@ -4,6 +4,7 @@
     pkgs.bun
     pkgs.nodejs_latest
     pkgs.vercel-pkg
+    pkgs.turso-cli
   ];
   idx.extensions = [
     "bradlc.vscode-tailwindcss"
