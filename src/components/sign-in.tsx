@@ -1,18 +1,16 @@
 import { signIn, signOut } from "@/auth"
 import { Button } from './ui/button';
-import { Github } from "lucide-react";
-
 export function SignIn({ provider, ...props }: { provider?: string } & React.ComponentPropsWithRef<typeof Button>) {
     return (
       <form
         action={async () => {
           "use server"
-          await signIn("github", {
+          await signIn(provider || "google", {
             callbackUrl: "/",
           })
         }}
       >
-        <Button {...props}><span><Github/></span> Login with GitHub</Button>
+        <Button {...props}> Login with {provider || "Google"}</Button>
       </form>
     )
 }

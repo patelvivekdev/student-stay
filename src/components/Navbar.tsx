@@ -18,7 +18,10 @@ export default async function Navbar() {
             <SignOut className="w-full md:w-auto text-black" />
           </div>
         ) : (
-          <SignIn className="w-full md:w-auto bg-neutral-300 text-black hover:bg-neutral-500" />
+          <div className="flex flex-row items-center gap-4">
+            <SignIn className="w-full md:w-auto bg-neutral-300 text-black hover:bg-neutral-500" provider="google" />
+            <SignIn className="w-full md:w-auto bg-neutral-300 text-black hover:bg-neutral-500" provider="github" />
+          </div>
         )}
       </div>
     </nav>

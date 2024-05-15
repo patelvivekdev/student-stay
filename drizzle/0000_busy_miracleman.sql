@@ -21,17 +21,24 @@ CREATE TABLE `session` (
 	FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE TABLE `user` (
-	`id` text PRIMARY KEY NOT NULL,
-	`name` text,
-	`email` text NOT NULL,
-	`emailVerified` integer,
-	`image` text
-);
---> statement-breakpoint
 CREATE TABLE `verificationToken` (
 	`identifier` text NOT NULL,
 	`token` text NOT NULL,
 	`expires` integer NOT NULL,
 	PRIMARY KEY(`identifier`, `token`)
+);
+--> statement-breakpoint
+CREATE TABLE `user` (
+	`id` text PRIMARY KEY NOT NULL,
+	`name` text,
+	`email` text NOT NULL,
+	`emailVerified` integer,
+	`image` text,
+	`gender` text,
+	`address` text,
+	`home_country` text,
+	`is_looking_for_accommodation` integer DEFAULT false,
+	`is_looking_for_accommodate` integer DEFAULT false,
+	`created_at` integer DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` integer DEFAULT CURRENT_TIMESTAMP
 );
