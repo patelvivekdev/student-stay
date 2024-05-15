@@ -14,8 +14,8 @@
   "dependencies": {
     "@auth/drizzle-adapter": "^1.1.0",
     "@libsql/client": "^0.6.0",
-    "drizzle-orm": "^0.30.10",
     "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.30.10",
     "next": "14.2.3",
     "next-auth": "beta",
     "react": "^18.3.0",
