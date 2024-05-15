@@ -1,12 +1,17 @@
-import '@/assets/styles/globals.css'
+import "@/app/styles/globals.css"
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata:Metadata = {
 	title: 'Student Stay | Find your roommates',
 	description: 'Find the best student accommodation in the KWC area',
 	keywords: 'student, accommodation, KWC, roommates',
 }
 
-export default function RootLayout({children}) {
+export default function RootLayout({
+	children,
+  }: Readonly<{
+	children: React.ReactNode;
+  }>) {
 	return (
 		<html lang='en'>
 			<body>
