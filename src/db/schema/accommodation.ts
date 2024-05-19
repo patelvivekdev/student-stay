@@ -15,7 +15,7 @@ export const accommodationTable = sqliteTable('accommodation', {
     price: integer('price', { mode: 'number' }).notNull(),
     is_featured: integer("is_featured", { mode: "boolean" }).default(false),
     is_active: integer("is_active", { mode: "boolean" }).default(true),
-    userId: integer('user_id')
+    userId: text('user_id')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
     createdAt: text('created_at').default(sql`(CURRENT_TIMESTAMP)`).notNull(),

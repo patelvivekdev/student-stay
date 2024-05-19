@@ -1,7 +1,14 @@
-export default function createAccommodation(){
+import { redirect } from "next/navigation";
+import AddForm from "./AddForm";
+import { auth } from "@/auth";
+
+export default async function CreateAccommodation(){
+    const session = await auth();
+    const user = session?.user;
+    if(!user || !user.id){
+        redirect("/login");
+    }
     return(
-        <section>
-            <h1>Add new accommodation</h1>
-        </section>
+        <AddForm userId={(user.id)}/>
     )
 }
