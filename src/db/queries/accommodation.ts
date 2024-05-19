@@ -1,8 +1,10 @@
 "use server"
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, unstable_noStore } from 'next/cache';
 import { db } from '../index'
-import { InsertAccommodation, SelectAccommodation, accommodationTable } from '../schema/accommodation'
+import { InsertAccommodation, accommodationTable } from '../schema/accommodation'
+import {users} from "../schema/user"
+import { eq } from "drizzle-orm";
 
 export async function createAccommodation(data: InsertAccommodation) {
   let response:any = await db.insert(accommodationTable).values(data);
@@ -12,6 +14,8 @@ export async function createAccommodation(data: InsertAccommodation) {
 }
 
 export async function getAccommodation() {
-  let response = await db.select().from(accommodationTable);
-  return response;
+  unstable_noStore();
+
+  const result = await db.select().from(accommodationTable).innerJoin(users, eq(accommodationTable.userId, users.id))
+  return result;
 }

@@ -23,7 +23,7 @@ export default async function Navbar() {
 
   return (
     <nav className="p-4 md:p-6 shadow-md bg-zinc-600 text-white">
-      <div className="container mx-auto flex flex-row justify-between items-center">
+      <div className="container mx-auto flex flex-row flex-wrap justify-between items-center">
         <Link href="/" className="text-xl font-bold">
           Student Stay
         </Link>
