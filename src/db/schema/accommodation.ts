@@ -22,6 +22,18 @@ export const accommodationTable = sqliteTable('accommodation', {
     updateAt: integer('updated_at', { mode: 'timestamp' }).$onUpdate(() => new Date()),
 });
 
+export const imagesTable = sqliteTable('images', {
+    id: integer('id').primaryKey(),
+    accommodationId: integer('accommodation_id').references(() => accommodationTable.id, { onDelete: 'cascade' }).notNull(),
+    imagePath: text('image_path').notNull(),
+    imagePublicId: text('image_public_id').notNull(),
+    createdAt: text('created_at').default(sql`(CURRENT_TIMESTAMP)`).notNull(),
+    updateAt: integer('updated_at', { mode: 'timestamp' }).$onUpdate(() => new Date()),
+  });
+
 
 export type InsertAccommodation = typeof accommodationTable.$inferInsert;
 export type SelectAccommodation = typeof accommodationTable.$inferSelect;
+
+export type InsertImage = typeof imagesTable.$inferInsert;
+export type SelectImage = typeof imagesTable.$inferSelect;

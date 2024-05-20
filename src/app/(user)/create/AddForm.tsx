@@ -14,8 +14,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useActionState } from "react";
-import { createAccommodation } from "@/db/queries/accommodation";
+import { useState } from "react";
+import { createAccommodationWithImages } from "@/db/queries/accommodation";
+import { CldUploadWidget } from "next-cloudinary";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -40,10 +41,17 @@ const formSchema = z.object({
   price: z.coerce.number().int().gt(1, {
     message: "Price must be at least 1.",
   }),
+  images: z.array(
+    z.object({
+      imagePath: z.string(),
+      imagePublicId: z.string(),
+    })
+  ),
 });
 
 export default function AddForm({ userId }: { userId: string }) {
   // const [state, action, pending] = useActionState()
+  const [resource, setResource] = useState<any>();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -57,12 +65,29 @@ export default function AddForm({ userId }: { userId: string }) {
       baths: Number(1),
       price: Number(100),
       userId: userId,
+      images: [],
     },
   });
 
+  console.log("resource", resource)
+
   // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    let data = await createAccommodation(values);
+    let images: {
+      imagePath: string;
+      imagePublicId: string;
+    }[] = [];
+    if (resource) {
+      for (let i = 0; i < resource.length; i++) {
+        images.push({
+          imagePublicId: resource[i].url,
+          imagePath: resource[i].public_id,
+        });
+      }
+    }
+    console.log("resource", resource.url)
+    console.log("images", images)
+    await createAccommodationWithImages(values, images);
     // reset the form
     form.reset();
   };
@@ -234,7 +259,33 @@ export default function AddForm({ userId }: { userId: string }) {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <div className="flex flex-col gap-4">
+            <CldUploadWidget
+              options={{ 
+                sources: ["local", "url"], 
+                multiple: true,
+              }}
+              uploadPreset="student-stay-preset"
+              
+            >
+              {({ open }) => {
+                function handleOnClick() {
+                  setResource(undefined);
+                  open();
+                }
+                return (
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={handleOnClick}
+                  >
+                    Upload Images
+                  </Button>
+                );
+              }}
+            </CldUploadWidget>
+            <Button type="submit">Submit</Button>
+          </div>
         </form>
       </Form>
     </section>
