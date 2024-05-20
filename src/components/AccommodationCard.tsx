@@ -68,7 +68,9 @@ export function AccommodationCard({
 
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button>Message</Button>
+        <Link href={`/accommodations/${accommodation.id}`}>
+          <Button>Details</Button>
+        </Link>
         <Button variant="outline">Add to Bookmark</Button>
       </CardFooter>
     </Card>

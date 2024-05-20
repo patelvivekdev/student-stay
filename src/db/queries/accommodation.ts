@@ -42,6 +42,29 @@ export async function getAccommodation() {
   return results;
 }
 
+export async function getAccommodationById(id: number) {
+  unstable_noStore();
+  // get all accommodations with their images and user
+  const results = await db
+    .select({
+      accommodation: accommodationTable,
+      user: users,
+      images: sql<string>`group_concat(${imagesTable.imagePath})`
+    })
+    .from(accommodationTable)
+    .leftJoin(users, eq(accommodationTable.userId, users.id))
+    .leftJoin(
+      imagesTable,
+      eq(accommodationTable.id, imagesTable.accommodationId,)
+    )
+    .groupBy(accommodationTable.id)
+    .where(eq(accommodationTable.id, id))
+    .all();
+
+  return results;
+}
+
+
 export async function createAccommodationWithImages(
   accommodationData: InsertAccommodation,
   formData: FormData
