@@ -1,4 +1,6 @@
 import * as React from "react";
+import Image from 'next/image';
+import Link from 'next/link';
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,12 +22,22 @@ import { Bath, Bed, CircleDollarSign, MapPin } from "lucide-react";
 export function AccommodationCard({
   accommodation,
   user,
+  image
 }: {
   accommodation: SelectAccommodation;
   user: SelectUser;
+  image: string;
 }) {
   return (
-    <Card className="mx-auto w-3/4 sm:w-[350px]">
+    <Card className="mx-auto w-3/4 sm:w-[350px] rounded-xl shadow-md relative">
+      <Image
+        src={image}
+        alt=''
+        height={0}
+        width={0}
+        sizes='100vw'
+        className='w-full h-auto rounded-t-xl'
+      />
       <CardHeader>
         <CardTitle className="text-center font-bold">{accommodation.name}</CardTitle>
         <CardDescription>{accommodation.description}</CardDescription>

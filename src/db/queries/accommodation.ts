@@ -24,12 +24,22 @@ export async function createAccommodation(
 
 export async function getAccommodation() {
   unstable_noStore();
-
-  const result = await db
-    .select()
+  // get all accommodations with their images and user
+  const results = await db
+    .select({
+      accommodation: accommodationTable,
+      user: users,
+      image: imagesTable,
+    })
     .from(accommodationTable)
-    .innerJoin(users, eq(accommodationTable.userId, users.id));
-  return result;
+    .leftJoin(users, eq(accommodationTable.userId, users.id))
+    .leftJoin(
+      imagesTable,
+      eq(imagesTable.accommodationId, accommodationTable.id)
+    )
+    .all();
+
+  return results;
 }
 
 export async function createAccommodationWithImages(

@@ -6,7 +6,7 @@ export default async function CreateAccommodation(){
     const session = await auth();
     const user = session?.user;
     if(!user || !user.id){
-        redirect("/login");
+        redirect("/");
     }
     return(
         <AddForm userId={(user.id)}/>
