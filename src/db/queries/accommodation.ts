@@ -9,7 +9,7 @@ import {
   imagesTable,
 } from "../schema/accommodation";
 import { users } from "../schema/user";
-import { eq } from "drizzle-orm";
+import { eq, getTableColumns, sql } from "drizzle-orm";
 import cloudinary from "@/lib/cloudinary";
 
 export async function createAccommodation(
@@ -17,7 +17,6 @@ export async function createAccommodation(
   images: string[]
 ) {
   let response: any = await db.insert(accommodationTable).values(data);
-  console.log("response", response);
   revalidatePath("/");
   //   return response;
 }
@@ -29,14 +28,15 @@ export async function getAccommodation() {
     .select({
       accommodation: accommodationTable,
       user: users,
-      image: imagesTable,
+      images: sql<string>`group_concat(${imagesTable.imagePath})`
     })
     .from(accommodationTable)
     .leftJoin(users, eq(accommodationTable.userId, users.id))
     .leftJoin(
       imagesTable,
-      eq(imagesTable.accommodationId, accommodationTable.id)
+      eq(accommodationTable.id, imagesTable.accommodationId,)
     )
+    .groupBy(accommodationTable.id)
     .all();
 
   return results;

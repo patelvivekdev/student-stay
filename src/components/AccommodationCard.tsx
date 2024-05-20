@@ -22,14 +22,15 @@ import { Bath, Bed, CircleDollarSign, MapPin } from "lucide-react";
 export function AccommodationCard({
   accommodation,
   user,
-  image
+  images
 }: {
   accommodation: SelectAccommodation;
   user: SelectUser;
-  image: string;
+  images: string;
 }) {
+  let image = images.split(',')[0];
   return (
-    <Card className="mx-auto w-3/4 sm:w-[350px] rounded-xl shadow-md relative">
+    <Card className="mx-auto rounded-xl shadow-md relative">
       <Image
         src={image}
         alt=''
@@ -62,7 +63,7 @@ export function AccommodationCard({
             <p className="text-base font-bold flex flex-row gap-3"><Bath />: {accommodation?.baths} bathroom</p>
         </div>
         <div className="flex flex-col gap-4">
-            <p className="text-base font-bold flex flex-row gap-3"><CircleDollarSign />: {accommodation?.price} Per Month</p>
+            <p className="text-base font-bold flex flex-row gap-3"><CircleDollarSign />: ${accommodation?.price} Per Month</p>
         </div>
 
       </CardContent>
