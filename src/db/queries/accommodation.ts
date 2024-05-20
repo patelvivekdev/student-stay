@@ -1,42 +1,84 @@
-"use server"
+"use server";
 
-import { revalidatePath, unstable_noStore } from 'next/cache';
-import { db } from '../index'
-import { InsertAccommodation, accommodationTable, InsertImage, imagesTable } from '../schema/accommodation'
-import {users} from "../schema/user"
+import { revalidatePath, unstable_noStore } from "next/cache";
+import { db } from "../index";
+import {
+  InsertAccommodation,
+  accommodationTable,
+  InsertImage,
+  imagesTable,
+} from "../schema/accommodation";
+import { users } from "../schema/user";
 import { eq } from "drizzle-orm";
+import cloudinary from "@/lib/cloudinary";
 
-export async function createAccommodation(data: InsertAccommodation, images: string[]) {
-  let response:any = await db.insert(accommodationTable).values(data);
-  console.log("response", response)
-  revalidatePath('/');
-//   return response;
+export async function createAccommodation(
+  data: InsertAccommodation,
+  images: string[]
+) {
+  let response: any = await db.insert(accommodationTable).values(data);
+  console.log("response", response);
+  revalidatePath("/");
+  //   return response;
 }
 
 export async function getAccommodation() {
   unstable_noStore();
 
-  const result = await db.select().from(accommodationTable).innerJoin(users, eq(accommodationTable.userId, users.id))
+  const result = await db
+    .select()
+    .from(accommodationTable)
+    .innerJoin(users, eq(accommodationTable.userId, users.id));
   return result;
 }
 
-export async function createAccommodationWithImages(accommodationData: InsertAccommodation, imagesData: 
-  {
-    imagePath: string;
-    imagePublicId: string;
-    id?: number | undefined;
-    createdAt?: string | undefined;
-    updateAt?: Date | null | undefined;
-}[]) {
+export async function createAccommodationWithImages(
+  accommodationData: InsertAccommodation,
+  formData: FormData
+) {
   await db.transaction(async (tx) => {
-    try{
-      const [newAccommodation] = await tx.insert(accommodationTable).values(accommodationData).returning();
+    try {
+      const [newAccommodation] = await tx
+        .insert(accommodationTable)
+        .values(accommodationData)
+        .returning();
       const accommodationId = newAccommodation.id;
-      await tx.insert(imagesTable).values(imagesData.map((image) => ({ ...image, accommodationId })));
-      revalidatePath('/');
+
+      let imagesData = [];
+
+      const images = formData.getAll("files") as File[];
+
+      for (const imageFile of images!) {
+        const imageBuffer = await imageFile.arrayBuffer();
+        const imageArray = Array.from(new Uint8Array(imageBuffer));
+        const imageData = Buffer.from(imageArray);
+        // Convert the image data to base64
+        const imageBase64 = imageData.toString("base64");
+
+        try {
+          // Make request to upload to Cloudinary
+          const result = await cloudinary.uploader.upload(
+            `data:image/png;base64,${imageBase64}`,
+            {
+              folder: "accommodation",
+            }
+          );
+          imagesData.push({
+            imagePath: result.secure_url,
+            imagePublicId: result.public_id,
+          });
+        } catch (error) {
+          console.error("Error uploading image to Cloudinary:", error);
+          throw error;
+        }
+      }
+      await tx
+        .insert(imagesTable)
+        .values(imagesData.map((image) => ({ ...image, accommodationId })));
+      revalidatePath("/");
     } catch (error) {
       tx.rollback();
-      console.error('Error creating accommodation with images:', error);
+      console.error("Error creating accommodation with images:", error);
       throw error;
     }
   });

@@ -1,6 +1,7 @@
 import "@/app/styles/globals.css"
 import Navbar from "@/components/Navbar";
 import type { Metadata } from "next";
+import { Toaster } from 'react-hot-toast';
 
 export const metadata:Metadata = {
 	title: 'Student Stay | Find your roommates',
@@ -18,6 +19,7 @@ export default function RootLayout({
 			<body>
 				<Navbar/>
 				{children}
+				<Toaster position="bottom-center" />
 			</body>
 		</html>
 	)
