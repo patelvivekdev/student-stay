@@ -1,18 +1,22 @@
-import { signIn, signOut } from "@/auth"
+import React from 'react';
+import { signIn, signOut } from '@/auth';
 import { Button } from './ui/button';
-export function SignIn({ provider, ...props }: { provider?: string } & React.ComponentPropsWithRef<typeof Button>) {
-    return (
-      <form
-        action={async () => {
-          "use server"
-          await signIn(provider || "google", {
-            callbackUrl: "/",
-          })
-        }}
-      >
-        <Button {...props}> Login with {provider || "Google"}</Button>
-      </form>
-    )
+export function SignIn({
+  provider,
+  ...props
+}: { provider?: string } & React.ComponentPropsWithRef<typeof Button>) {
+  return (
+    <form
+      action={async () => {
+        'use server';
+        await signIn(provider || 'google', {
+          callbackUrl: '/',
+        });
+      }}
+    >
+      <Button {...props}> Login with {provider || 'Google'}</Button>
+    </form>
+  );
 }
 
 export function SignOut(props: React.ComponentPropsWithRef<typeof Button>) {

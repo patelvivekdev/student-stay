@@ -4,16 +4,16 @@ const nextConfig = {
     dangerouslyAllowSVG: true,
     remotePatterns: [
       {
-        hostname: "patelvivek.dev",
+        hostname: 'patelvivek.dev',
       },
       {
-        hostname: "github-profile-summary-cards.vercel.app",
+        hostname: 'github-profile-summary-cards.vercel.app',
       },
       {
-        hostname: "avatars.githubusercontent.com",
+        hostname: 'avatars.githubusercontent.com',
       },
       {
-        hostname: "lh3.googleusercontent.com",
+        hostname: 'lh3.googleusercontent.com',
       },
       {
         protocol: 'https',

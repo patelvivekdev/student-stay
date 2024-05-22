@@ -1,14 +1,12 @@
-import { redirect } from "next/navigation";
-import AddForm from "./AddForm";
-import { auth } from "@/auth";
+import { redirect } from 'next/navigation';
+import AddForm from './AddForm';
+import { auth } from '@/auth';
 
-export default async function CreateAccommodation(){
-    const session = await auth();
-    const user = session?.user;
-    if(!user || !user.id){
-        redirect("/");
-    }
-    return(
-        <AddForm userId={(user.id)}/>
-    )
+export default async function CreateAccommodation() {
+  const session = await auth();
+  const user = session?.user;
+  if (!user || !user.id) {
+    redirect('/');
+  }
+  return <AddForm userId={user.id} />;
 }

@@ -3,34 +3,43 @@ import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { users } from './user';
 
 export const accommodationTable = sqliteTable('accommodation', {
-    id: integer('id', { mode: 'number' }).primaryKey(),
-    name: text('name').notNull(),
-    type: text("type").notNull(),
-    description: text('description'),
-    street: text("street"),
-    city: text("city"),
-    zipcode: text("zipcode"),
-    beds: integer("beds", { mode: 'number' }).notNull(),
-    baths: integer("baths", { mode: 'number' }).notNull(),
-    price: integer('price', { mode: 'number' }).notNull(),
-    is_featured: integer("is_featured", { mode: "boolean" }).default(false),
-    is_active: integer("is_active", { mode: "boolean" }).default(true),
-    userId: text('user_id')
+  id: integer('id', { mode: 'number' }).primaryKey(),
+  name: text('name').notNull(),
+  type: text('type').notNull(),
+  description: text('description'),
+  street: text('street'),
+  city: text('city'),
+  zipcode: text('zipcode'),
+  beds: integer('beds', { mode: 'number' }).notNull(),
+  baths: integer('baths', { mode: 'number' }).notNull(),
+  price: integer('price', { mode: 'number' }).notNull(),
+  is_featured: integer('is_featured', { mode: 'boolean' }).default(false),
+  is_active: integer('is_active', { mode: 'boolean' }).default(true),
+  userId: text('user_id')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
-    createdAt: text('created_at').default(sql`(CURRENT_TIMESTAMP)`).notNull(),
-    updateAt: integer('updated_at', { mode: 'timestamp' }).$onUpdate(() => new Date()),
+  createdAt: text('created_at')
+    .default(sql`(CURRENT_TIMESTAMP)`)
+    .notNull(),
+  updateAt: integer('updated_at', { mode: 'timestamp' }).$onUpdate(
+    () => new Date(),
+  ),
 });
 
 export const imagesTable = sqliteTable('images', {
-    id: integer('id').primaryKey(),
-    accommodationId: integer('accommodation_id').references(() => accommodationTable.id, { onDelete: 'cascade' }).notNull(),
-    imagePath: text('image_path').notNull(),
-    imagePublicId: text('image_public_id').notNull(),
-    createdAt: text('created_at').default(sql`(CURRENT_TIMESTAMP)`).notNull(),
-    updateAt: integer('updated_at', { mode: 'timestamp' }).$onUpdate(() => new Date()),
-  });
-
+  id: integer('id').primaryKey(),
+  accommodationId: integer('accommodation_id')
+    .references(() => accommodationTable.id, { onDelete: 'cascade' })
+    .notNull(),
+  imagePath: text('image_path').notNull(),
+  imagePublicId: text('image_public_id').notNull(),
+  createdAt: text('created_at')
+    .default(sql`(CURRENT_TIMESTAMP)`)
+    .notNull(),
+  updateAt: integer('updated_at', { mode: 'timestamp' }).$onUpdate(
+    () => new Date(),
+  ),
+});
 
 export type InsertAccommodation = typeof accommodationTable.$inferInsert;
 export type SelectAccommodation = typeof accommodationTable.$inferSelect;
