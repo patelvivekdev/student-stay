@@ -1,9 +1,10 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import React from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -12,20 +13,20 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useState } from "react";
-import { createAccommodationWithImages } from "@/db/queries/accommodation";
-import toast from "react-hot-toast";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { useState } from 'react';
+import { createAccommodationWithImages } from '@/db/queries/accommodation';
+import toast from 'react-hot-toast';
 
 const formSchema = z.object({
   name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
+    message: 'Name must be at least 2 characters.',
   }),
   description: z.string(),
   type: z.string(),
   street: z.string().min(2, {
-    message: "Street must be at least 2 characters.",
+    message: 'Street must be at least 2 characters.',
   }),
   // city must be kitchener, waterloo, cambridge
   city: z.string(),
@@ -33,13 +34,13 @@ const formSchema = z.object({
   zipcode: z.string().length(6),
   userId: z.string(),
   beds: z.coerce.number().int().gt(0, {
-    message: "Beds must be at least 1.",
+    message: 'Beds must be at least 1.',
   }),
   baths: z.coerce.number().int().gt(0, {
-    message: "Baths must be at least 1.",
+    message: 'Baths must be at least 1.',
   }),
   price: z.coerce.number().int().gt(0, {
-    message: "Price must be at least 1.",
+    message: 'Price must be at least 1.',
   }),
 });
 
@@ -48,12 +49,12 @@ export default function AddForm({ userId }: { userId: string }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      description: "",
-      type: "",
-      street: "",
-      city: "",
-      zipcode: "",
+      name: '',
+      description: '',
+      type: '',
+      street: '',
+      city: '',
+      zipcode: '',
       beds: Number(1),
       baths: Number(1),
       price: Number(100),
@@ -64,7 +65,7 @@ export default function AddForm({ userId }: { userId: string }) {
   // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     await createAccommodationWithImages(values, resource);
-    toast.success("Accommodation added successfully");
+    toast.success('Accommodation added successfully');
     // reset the form
     form.reset();
   };
@@ -72,32 +73,32 @@ export default function AddForm({ userId }: { userId: string }) {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files!);
     if (files.length > 10) {
-      toast.error("You can only upload 10 images.");
+      toast.error('You can only upload 10 images.');
       return;
     }
     if (files.length > 0) {
       const formData = new FormData();
       files.forEach((file) => {
-        formData.append("files", file);
+        formData.append('files', file);
       });
       setResource(formData);
     }
   };
 
   return (
-    <section className="min-h-screen py-4 flex flex-col mx-auto w-3/4">
-      <h1 className="text-4xl font-bold mb-4">Add accommodation</h1>
+    <section className='mx-auto flex min-h-screen w-3/4 flex-col py-4'>
+      <h1 className='mb-4 text-4xl font-bold'>Add accommodation</h1>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
           <FormField
             control={form.control}
-            name="name"
+            name='name'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="House near walmart, Cambridge"
+                    placeholder='House near walmart, Cambridge'
                     {...field}
                   />
                 </FormControl>
@@ -108,13 +109,13 @@ export default function AddForm({ userId }: { userId: string }) {
           />
           <FormField
             control={form.control}
-            name="description"
+            name='description'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="A beautiful house near walmart. "
+                    placeholder='A beautiful house near walmart. '
                     {...field}
                   />
                 </FormControl>
@@ -127,12 +128,12 @@ export default function AddForm({ userId }: { userId: string }) {
           />
           <FormField
             control={form.control}
-            name="type"
+            name='type'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Type</FormLabel>
                 <FormControl>
-                  <Input placeholder="House" {...field} />
+                  <Input placeholder='House' {...field} />
                 </FormControl>
                 <FormDescription>Apartment | House | Condo.</FormDescription>
                 <FormMessage />
@@ -141,12 +142,12 @@ export default function AddForm({ userId }: { userId: string }) {
           />
           <FormField
             control={form.control}
-            name="street"
+            name='street'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Street</FormLabel>
                 <FormControl>
-                  <Input placeholder="000 Street" {...field} />
+                  <Input placeholder='000 Street' {...field} />
                 </FormControl>
                 <FormDescription>Add street of location.</FormDescription>
                 <FormMessage />
@@ -155,12 +156,12 @@ export default function AddForm({ userId }: { userId: string }) {
           />
           <FormField
             control={form.control}
-            name="city"
+            name='city'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>City</FormLabel>
                 <FormControl>
-                  <Input placeholder="Cambridge" {...field} />
+                  <Input placeholder='Cambridge' {...field} />
                   {/* <div className="flex gap-4">
                     <label>
                       <input
@@ -198,12 +199,12 @@ export default function AddForm({ userId }: { userId: string }) {
           />
           <FormField
             control={form.control}
-            name="zipcode"
+            name='zipcode'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Zipcode</FormLabel>
                 <FormControl>
-                  <Input placeholder="zipcode of location" {...field} />
+                  <Input placeholder='zipcode of location' {...field} />
                 </FormControl>
                 <FormDescription>N1E1C2</FormDescription>
                 <FormMessage />
@@ -212,12 +213,12 @@ export default function AddForm({ userId }: { userId: string }) {
           />
           <FormField
             control={form.control}
-            name="beds"
+            name='beds'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Beds</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="2" {...field} />
+                  <Input type='number' placeholder='2' {...field} />
                 </FormControl>
                 <FormDescription>Add number of beds.</FormDescription>
                 <FormMessage />
@@ -226,12 +227,12 @@ export default function AddForm({ userId }: { userId: string }) {
           />
           <FormField
             control={form.control}
-            name="baths"
+            name='baths'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Baths</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="2" {...field} />
+                  <Input type='number' placeholder='2' {...field} />
                 </FormControl>
                 <FormDescription>Add number of baths.</FormDescription>
                 <FormMessage />
@@ -240,12 +241,12 @@ export default function AddForm({ userId }: { userId: string }) {
           />
           <FormField
             control={form.control}
-            name="price"
+            name='price'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Price</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="100" {...field} />
+                  <Input type='number' placeholder='100' {...field} />
                 </FormControl>
                 <FormDescription>$100 per month.</FormDescription>
                 <FormMessage />
@@ -254,14 +255,14 @@ export default function AddForm({ userId }: { userId: string }) {
           />
 
           <Input
-            type="file"
+            type='file'
             multiple
-            accept="image/*"
+            accept='image/*'
             onChange={handleImageChange}
           />
 
-          <div className="flex flex-col gap-4">
-            <Button type="submit">Submit</Button>
+          <div className='flex flex-col gap-4'>
+            <Button type='submit'>Submit</Button>
           </div>
         </form>
       </Form>
